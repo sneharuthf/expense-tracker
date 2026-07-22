@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wealthfolio — Expense Tracker</title>
+<meta name="description" content="Track every rupee. Save smarter.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== LOADING SHIMMER ===================== -->
+<div id="page-loader" class="page-loader">
+  <div class="loader-coin">
+    <i class="fa-solid fa-indian-rupee-sign"></i>
+  </div>
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#top" class="logo">
+      <span class="logo-mark"><i class="fa-solid fa-wallet"></i></span>
+      Wealthfolio
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+      <li><a href="#transactions" class="nav-link">Transactions</a></li>
+      <li><a href="#statistics" class="nav-link">Statistics</a></li>
+      <li><a href="#about" class="nav-link">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-sun sun-icon"></i>
+        <i class="fa-solid fa-moon moon-icon"></i>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow"><i class="fa-solid fa-sparkles"></i> Personal finance, refined</span>
+      <h1 class="hero-title">Track Every Rupee.<br><span class="grad-text">Save Smarter.</span></h1>
+      <p class="hero-subtitle">Wealthfolio turns scattered spending into a clear, living picture of your money — add a transaction in seconds, watch your balance breathe in real time, and let the charts tell you where it's actually going.</p>
+      <div class="hero-actions">
+        <a href="#add-transaction" class="btn btn-primary btn-lg">
+          <span>Get Started</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#statistics" class="btn btn-ghost btn-lg">See Insights</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="float-card card-balance" style="--delay:0s">
+        <div class="fc-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+        <div class="fc-label">Total Balance</div>
+        <div class="fc-value" data-count="128450">₹0</div>
+      </div>
+      <div class="float-card card-income" style="--delay:0.6s">
+        <div class="fc-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+        <div class="fc-label">Income</div>
+        <div class="fc-value" data-count="182000">₹0</div>
+      </div>
+      <div class="float-card card-expense" style="--delay:1.2s">
+        <div class="fc-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+        <div class="fc-label">Expenses</div>
+        <div class="fc-value" data-count="53550">₹0</div>
+      </div>
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><i class="fa-solid fa-chevron-down"></i></div>
+</header>
+
+<main>
+
+<!-- ===================== DASHBOARD ===================== -->
+<section class="section" id="dashboard">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Overview</span>
+      <h2>Your money, at a glance</h2>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card glass reveal" data-tint="indigo">
+        <div class="stat-top">
+          <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+          <span class="stat-chip" id="chip-balance">—</span>
+        </div>
+        <div class="stat-label">Total Balance</div>
+        <div class="stat-value" id="stat-balance" data-count="0">₹0</div>
+      </div>
+
+      <div class="stat-card glass reveal" data-tint="green">
+        <div class="stat-top">
+          <div class="stat-icon"><i class="fa-solid fa-arrow-down-long"></i></div>
+          <span class="stat-chip good" id="chip-income">—</span>
+        </div>
+        <div class="stat-label">Total Income</div>
+        <div class="stat-value" id="stat-income" data-count="0">₹0</div>
+      </div>
+
+      <div class="stat-card glass reveal" data-tint="red">
+        <div class="stat-top">
+          <div class="stat-icon"><i class="fa-solid fa-arrow-up-long"></i></div>
+          <span class="stat-chip bad" id="chip-expense">—</span>
+        </div>
+        <div class="stat-label">Total Expenses</div>
+        <div class="stat-value" id="stat-expense" data-count="0">₹0</div>
+      </div>
+
+      <div class="stat-card glass reveal" data-tint="purple">
+        <div class="stat-top">
+          <div class="stat-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+          <span class="stat-chip" id="chip-savings">—</span>
+        </div>
+        <div class="stat-label">Savings</div>
+        <div class="stat-value" id="stat-savings" data-count="0">₹0</div>
+      </div>
+    </div>
+
+    <div class="dash-lower">
+      <!-- Budget progress -->
+      <div class="panel glass reveal budget-panel">
+        <h3 class="panel-title"><i class="fa-solid fa-bullseye"></i> Monthly Budget</h3>
+        <div class="budget-ring-wrap">
+          <svg class="budget-ring" viewBox="0 0 160 160">
+            <circle class="ring-track" cx="80" cy="80" r="70"></circle>
+            <circle class="ring-progress" id="budget-ring-progress" cx="80" cy="80" r="70"></circle>
+          </svg>
+          <div class="budget-ring-center">
+            <span class="budget-percent" id="budget-percent">0%</span>
+            <span class="budget-caption">used</span>
+          </div>
+        </div>
+        <div class="budget-figures">
+          <span id="budget-used">₹0</span> / <span id="budget-total">₹40,000</span>
+        </div>
+        <button class="btn btn-subtle" id="edit-budget-btn">Edit budget</button>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="panel glass reveal timeline-panel">
+        <h3 class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3>
+        <ul class="timeline" id="recent-timeline">
+          <!-- injected -->
+        </ul>
+      </div>
+
+      <!-- Quick insights -->
+      <div class="panel glass reveal insights-panel">
+        <h3 class="panel-title"><i class="fa-solid fa-lightbulb"></i> Quick Insights</h3>
+        <div class="insights-grid" id="insights-grid">
+          <!-- injected -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ADD TRANSACTION ===================== -->
+<section class="section alt" id="add-transaction">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Log it</span>
+      <h2>Add a transaction</h2>
+    </div>
+
+    <form class="add-form glass reveal" id="transaction-form" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label for="f-title">Title</label>
+          <input type="text" id="f-title" placeholder="e.g. Grocery run" autocomplete="off">
+          <span class="field-error" id="err-title"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-amount">Amount (₹)</label>
+          <input type="number" id="f-amount" placeholder="0.00" min="0" step="0.01">
+          <span class="field-error" id="err-amount"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-category">Category</label>
+          <select id="f-category">
+            <option value="Food">🍔 Food</option>
+            <option value="Transport">🚗 Transport</option>
+            <option value="Shopping">🛍️ Shopping</option>
+            <option value="Bills">🧾 Bills</option>
+            <option value="Health">💊 Health</option>
+            <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Salary">💼 Salary</option>
+            <option value="Investment">📈 Investment</option>
+            <option value="Other">✨ Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-date">Date</label>
+          <input type="date" id="f-date">
+          <span class="field-error" id="err-date"></span>
+        </div>
+
+        <div class="field type-field">
+          <label>Type</label>
+          <div class="type-toggle">
+            <button type="button" class="type-btn active" data-type="expense">
+              <i class="fa-solid fa-arrow-up"></i> Expense
+            </button>
+            <button type="button" class="type-btn" data-type="income">
+              <i class="fa-solid fa-arrow-down"></i> Income
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-plus"></i> Add Transaction
+        </button>
+        <button type="reset" class="btn btn-ghost" id="reset-form">Reset</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== TRANSACTION HISTORY ===================== -->
+<section class="section" id="transactions">
+  <div class="container">
+    <div class="section-head row">
+      <div>
+        <span class="section-eyebrow">History</span>
+        <h2>Transactions</h2>
+      </div>
+      <div class="history-actions">
+        <button class="btn btn-subtle" id="export-csv-btn"><i class="fa-solid fa-file-arrow-down"></i> Export CSV</button>
+        <button class="btn btn-subtle" id="print-btn"><i class="fa-solid fa-print"></i> Print</button>
+      </div>
+    </div>
+
+    <div class="toolbar glass reveal">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="Search transactions…">
+      </div>
+
+      <div class="toolbar-controls">
+        <select id="filter-type">
+          <option value="all">All types</option>
+          <option value="income">Income only</option>
+          <option value="expense">Expense only</option>
+        </select>
+
+        <select id="filter-category">
+          <option value="all">All categories</option>
+        </select>
+
+        <select id="sort-by">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="amount-desc">Amount: high to low</option>
+          <option value="amount-asc">Amount: low to high</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="transaction-list" id="transaction-list">
+      <!-- injected -->
+    </div>
+
+    <div class="empty-state" id="empty-state" hidden>
+      <div class="empty-illustration">
+        <i class="fa-solid fa-piggy-bank"></i>
+        <i class="fa-solid fa-plus empty-plus"></i>
+      </div>
+      <h3>No transactions yet</h3>
+      <p>Start tracking your money! Add your first transaction above.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STATISTICS ===================== -->
+<section class="section alt" id="statistics">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Analytics</span>
+      <h2>Statistics</h2>
+    </div>
+
+    <div class="chart-grid">
+      <div class="panel glass reveal">
+        <h3 class="panel-title"><i class="fa-solid fa-chart-pie"></i> Expense Categories</h3>
+        <div class="chart-box"><canvas id="chart-pie"></canvas></div>
+      </div>
+
+      <div class="panel glass reveal">
+        <h3 class="panel-title"><i class="fa-solid fa-chart-column"></i> Income vs Expense</h3>
+        <div class="chart-box"><canvas id="chart-bar"></canvas></div>
+      </div>
+
+      <div class="panel glass reveal chart-wide">
+        <h3 class="panel-title"><i class="fa-solid fa-chart-line"></i> Monthly Trend</h3>
+        <div class="chart-box"><canvas id="chart-line"></canvas></div>
+      </div>
+
+      <div class="panel glass reveal chart-wide">
+        <h3 class="panel-title"><i class="fa-solid fa-layer-group"></i> Spending Breakdown</h3>
+        <div class="chart-box"><canvas id="chart-breakdown"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section class="section" id="about">
+  <div class="container about-inner">
+    <div class="section-head">
+      <span class="section-eyebrow">About</span>
+      <h2>Why Wealthfolio</h2>
+    </div>
+    <p class="about-text">
+      Wealthfolio is a personal expense tracker built to feel less like a spreadsheet and more like
+      a private banking dashboard. Every rupee you log stays on your own device — nothing is sent
+      anywhere. It's designed to make the habit of tracking money feel calm, quick, and even a
+      little satisfying.
+    </p>
+    <div class="about-badges">
+      <span class="badge-pill"><i class="fa-solid fa-lock"></i> Local-only storage</span>
+      <span class="badge-pill"><i class="fa-solid fa-bolt"></i> Instant insights</span>
+      <span class="badge-pill"><i class="fa-solid fa-mobile-screen"></i> Works on any device</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FLOATING ACTION BUTTON ===================== -->
+<button class="fab" id="fab-add" aria-label="Add transaction">
+  <span class="fab-ripple"></span>
+  <i class="fa-solid fa-plus"></i>
+</button>
+
+<!-- ===================== TOASTS ===================== -->
+<div class="toast-stack" id="toast-stack"></div>
+
+<!-- ===================== BUDGET MODAL ===================== -->
+<div class="modal-overlay" id="budget-modal">
+  <div class="modal glass">
+    <h3>Edit monthly budget</h3>
+    <label for="budget-input">Budget amount (₹)</label>
+    <input type="number" id="budget-input" min="0" step="100">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="budget-cancel">Cancel</button>
+      <button class="btn btn-primary" id="budget-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <p>Made with <i class="fa-solid fa-heart"></i> &nbsp;·&nbsp; Wealthfolio Expense Tracker &nbsp;·&nbsp; <span id="footer-year"></span></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
